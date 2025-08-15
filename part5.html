@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>part 6</title>
+  <style>
+    body {
+      font-family: monospace;
+      color: white;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #000;
+    }
+
+    .button {
+      position: absolute;
+      padding: 10px 15px;
+      font-size: 24px;
+      cursor: pointer;
+      text-align: center;
+      color: #ffffff;
+      background-color: #11d932;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px #999;
+      transition: transform 0.2s ease;
+    }
+
+    .hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: monospace;
+    }
+
+    .circle {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: rgba(30, 0, 255, 0.4);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="circle" id="circle" data-speed="2"></div>
+
+  <button class="button" id="movingButton">click me</button>
+
+  <div class="hud">
+    <span id="clicksamount">0 / 10 Clicks</span><br>
+    <span id="10stimer">10.0s</span>
+  </div>
+
+  <script>
+    let time = 8;
+    let count = 0;
+    let timerStarted = false;
+    let interval;
+
+    const button = document.getElementById('movingButton');
+    const circle = document.getElementById('circle');
+    const clicksAmountSpan = document.getElementById('clicksamount');
+    const timerSpan = document.getElementById('10stimer');
+    const speed = parseFloat(circle.dataset.speed); 
+
+    function resetGame() {
+      time = 8;
+      count = 0;
+      timerStarted = false;
+      clearInterval(interval);
+      clicksAmountSpan.innerHTML = "0 / 10 Clicks";
+      timerSpan.innerHTML = "10.0s";
+
+      circle.style.left = '50%';
+      circle.style.top = '50%';
+      circle.style.transform = 'translate(-50%, -50%)';
+
+      button.style.left = `${window.innerWidth / 2 - button.offsetWidth / 2}px`;
+      button.style.top = `${window.innerHeight / 2 - button.offsetHeight / 2}px`;
+    }
+
+    function startTimer() {
+      interval = setInterval(() => {
+        time = parseFloat((time - 0.1).toFixed(1));
+        timerSpan.innerHTML = time.toFixed(1) + "s";
+
+        if (time <= 0) {
+          clearInterval(interval);
+          resetGame();
+        }
+      }, 100);
+    }
+
+    button.addEventListener('mousedown', () => {
+      if (!timerStarted) {
+        timerStarted = true;
+        startTimer();
+      }
+
+      const maxX = window.innerWidth - button.offsetWidth;
+      const maxY = window.innerHeight - button.offsetHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      button.style.left = `${randomX}px`;
+      button.style.top = `${randomY}px`;
+
+      count++;
+      clicksAmountSpan.innerHTML = count + " / 10 Clicks";
+
+      if (count >= 10 && time > 0) {
+        clearInterval(interval);
+        location.replace("part6.html");
+      }
+    });
+
+    function moveCircleTowardButton() {
+      const circleRect = circle.getBoundingClientRect();
+      const buttonRect = button.getBoundingClientRect();
+
+      const circleX = circleRect.left + circleRect.width / 2;
+      const circleY = circleRect.top + circleRect.height / 2;
+      const buttonX = buttonRect.left + buttonRect.width / 2;
+      const buttonY = buttonRect.top + buttonRect.height / 2;
+
+      const dx = buttonX - circleX;
+      const dy = buttonY - circleY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 10) {
+        resetGame();
+        return;
+      }
+
+      const moveX = (dx / distance) * speed;
+      const moveY = (dy / distance) * speed;
+
+      circle.style.left = (circle.offsetLeft + moveX) + 'px';
+      circle.style.top = (circle.offsetTop + moveY) + 'px';
+    }
+
+    function animate() {
+      moveCircleTowardButton();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+
+</body>
+</html>

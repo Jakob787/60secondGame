@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moving Button</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: rgb(247, 0, 0);
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .button {
+      position: absolute;
+      padding: 10px 15px;
+      font-size: 24px;
+      cursor: pointer;
+      text-align: center;
+      color: #ffffff;
+      background-color: #11d932;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px #999;
+      transition: transform 0.2s ease;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: monospace;
+    }
+
+    html {
+      background-image: url('o.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    h1, p, span {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>DONT CLICK THE BUTTON</h1>
+  <button class="button" id="movingButton">click me</button>
+
+  <span id="clicksamount">0 / 1 Clicks</span><br><br>
+  <span id="10stimer">10.0s</span>
+
+  <script>
+    let time = 10.0;
+    let count = 0;
+    let timerStarted = false;
+    let interval;
+
+    const button = document.getElementById('movingButton');
+    const clicksAmountSpan = document.getElementById('clicksamount');
+    const timerSpan = document.getElementById('10stimer');
+
+    function resetGame() {
+      time = 10.0;
+      count = 0;
+      timerStarted = false;
+      clearInterval(interval);
+      clicksAmountSpan.innerHTML = "0 / 10 Clicks";
+      timerSpan.innerHTML = "10.0s";
+    }
+
+    function startTimer() {
+      interval = setInterval(function () {
+        time = parseFloat((time - 0.1).toFixed(1));
+        timerSpan.innerHTML = time.toFixed(1) + "s";
+
+        if (time <= 0) {
+          clearInterval(interval);
+          resetGame();
+        }
+      }, 100);
+    }
+
+    button.addEventListener('mousedown', () => {
+      if (!timerStarted) {
+        timerStarted = true;
+        startTimer();
+      }
+
+      const maxX = window.innerWidth - button.offsetWidth;
+      const maxY = window.innerHeight - button.offsetHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      button.style.left = `${randomX}px`;
+      button.style.top = `${randomY}px`;
+
+      count++;
+      clicksAmountSpan.innerHTML = count + " / 1 Clicks";
+
+      if (count >= 1 && time > 0) {
+        clearInterval(interval);
+        location.replace("part2.html"); 
+      }
+    });
+  </script>
+
+</body>
+</html>

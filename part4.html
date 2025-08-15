@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>part 4</title>
+  <style>
+    html {
+      background-image: url('part2.jpg'); 
+      background-size: cover;
+      background-position: center;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: monospace;
+      color: white;
+    }
+
+    #typing {
+      font-size: 30px;
+      white-space: pre-wrap;
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(57, 13, 232, 0.6);
+    }
+
+    #nextButton {
+      display: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: white;
+      border: 2px solid black;
+      border-radius: 5px;
+    }
+
+    #nextButton:hover {
+      background-color: lightgray;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="typing"></div>
+  <button id="nextButton" onclick="location.href='part5.html'">Go further in the corruption</button>
+
+  <script>
+    const lines = [
+      "<span style='color:&lt;'>what was that</span>",
+      "\n<span style='color: red;'>Now you see what happens when u press the button</span>",
+      "\n<span style='color:&lt;'&lt;>Is this possible to fix?</span>",
+      "\n<span style='color: red;';>no you can only go further in the corruption but I won't let you</span>",
+      "\n&lt;we will se"
+    ];
+
+    let lineIndex = 0;
+    let charIndex = 0;
+    const typingDiv = document.getElementById('typing');
+    const nextButton = document.getElementById('nextButton');
+    let currentText = '';
+
+    function typeLine() {
+      if (lineIndex < lines.length) {
+        const currentLine = lines[lineIndex];
+
+        if (charIndex <= currentLine.length) {
+          typingDiv.innerHTML = currentText + currentLine.slice(0, charIndex);
+          charIndex++;
+          setTimeout(typeLine, 50); 
+        } else {
+          currentText += currentLine;
+          lineIndex++;
+          charIndex = 0;
+          setTimeout(typeLine, 100);
+        }
+      } else {
+        nextButton.style.display = 'inline-block';
+      }
+    }
+
+    typeLine();
+  </script>
+
+</body>
+</html>

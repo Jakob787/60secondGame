@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>part 3</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: rgb(255, 255, 255);
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: monospace;
+    }
+
+    .button {
+      position: absolute;
+      padding: 10px 15px;
+      font-size: 24px;
+      cursor: pointer;
+      text-align: center;
+      color: #ffffff;
+      background-color: #11d932;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px #999;
+      transition: transform 0.2s ease;
+    }
+
+    html {
+      background-image: url('uuu.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 18px;
+    }
+        h1 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 110vh;
+      margin: 0;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="titleContainer">
+    <h1>Click the button 10 times before the timer runs out!</h1>
+  </div>
+
+  </style>
+</head>
+<body>
+
+  <button class="button" id="movingButton">click me</button>
+
+  <div class="hud">
+    <span id="clicksamount">0 / 10 Clicks</span><br>
+    <span id="10stimer">10.0s</span>
+  </div>
+
+  <script>
+    let time = 10.0;
+    let count = 0;
+    let timerStarted = false;
+    let interval;
+
+    const button = document.getElementById('movingButton');
+    const clicksAmountSpan = document.getElementById('clicksamount');
+    const timerSpan = document.getElementById('10stimer');
+    const titleContainer = document.getElementById('titleContainer');
+
+    function resetGame() {
+      time = 10.0;
+      count = 0;
+      timerStarted = false;
+      clearInterval(interval);
+      clicksAmountSpan.innerHTML = "0 / 10 Clicks";
+      timerSpan.innerHTML = "10.0s";
+      titleContainer.style.display = 'block'; 
+    }
+
+    function startTimer() {
+      interval = setInterval(function () {
+        time = parseFloat((time - 0.1).toFixed(1));
+        timerSpan.innerHTML = time.toFixed(1) + "s";
+
+        if (time <= 0) {
+          clearInterval(interval);
+          resetGame();
+        }
+      }, 100);
+    }
+
+    button.addEventListener('mousedown', () => {
+      if (!timerStarted) {
+        timerStarted = true;
+        startTimer();
+        titleContainer.style.display = 'none'; 
+      }
+
+      const maxX = window.innerWidth - button.offsetWidth;
+      const maxY = window.innerHeight - button.offsetHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      button.style.left = `${randomX}px`;
+      button.style.top = `${randomY}px`;
+
+      count++;
+      clicksAmountSpan.innerHTML = count + " / 10 Clicks";
+
+      if (count >= 10 && time > 0) {
+        clearInterval(interval);
+        location.replace("part4.html"); 
+      }
+    });
+  </script>
+
+</body>
+</html>

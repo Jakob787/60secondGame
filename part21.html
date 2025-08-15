@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>part 2</title>
+  <style>
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      background-image: url('part2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      color: white;
+    }
+
+    #typing {
+      font-size: 30px;
+      white-space: pre;
+      color: rgb(157, 154, 154);
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.6);
+    }
+
+    #nextButton {
+      display: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: black;
+      border: 2px solid black;
+      border-radius: 5px;
+      backdrop-filter: blur(2px); 
+      transition: background-color 0.3s;
+    }
+
+    #nextButton:hover {
+      background-color: rgba(255, 255, 255, 0.9); 
+    }
+  </style>
+</head>
+<body>
+
+  <div id="typing"></div>
+  <button id="nextButton" onclick="location.href='part3.html'">Press it again</button>
+
+  <script>
+    const line1 = "Congratulations on the victory!! \n your score was ";
+    const line2 = localStorage.getItem("score");
+    const line3 = line1 + line2 
+
+    let index = 0;
+    const typingDiv = document.getElementById('typing');
+    const nextButton = document.getElementById('nextButton');
+    function typeLine1() 
+    {
+      if (index <= line3.length){
+        typingDiv.textContent = line3.slice(0, index);
+        index++;
+        setTimeout(typeLine1, 100);
+      } 
+    }
+    function typeLine2() {
+      if (index <= line2.length) {
+        typingDiv.textContent = line2.slice(0, index);
+        index++;
+        (typeLine2, 100); 
+      }
+    }
+
+    typeLine1();
+  </script>
+
+</body>
+</html>
